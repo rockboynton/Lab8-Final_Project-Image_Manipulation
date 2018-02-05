@@ -36,7 +36,6 @@ public class Controller {
             imageFilePath = selectedFile.getPath();
             dotIndex = imageFilePath.lastIndexOf(".");
             extension = imageFilePath.substring(dotIndex);
-            System.out.println(extension);
             if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
                 try (FileInputStream stream = new FileInputStream(selectedFile)){
                     image = new Image(stream);
@@ -45,7 +44,7 @@ public class Controller {
                     e1.printStackTrace();
                 }
             } else if (extension.equals(".msoe")) {
-
+                
             }
         }
     }
