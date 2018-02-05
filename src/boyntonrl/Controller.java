@@ -15,41 +15,48 @@ import java.util.logging.Logger;
 public class Controller {
 
 //    public static Logger logger = new Logger("bla");
-    private String imageFilePath;
+    private static String imageFilePath;
+    private static String imageFileExtension;
 
     @FXML
     private ImageView imageView;
 
     @FXML
     private void open(ActionEvent e) {
-        Image image;
-        int dotIndex;
-        String extension;
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Open Resource File");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png",
                         "*.jpg", "*.gif", "*.msoe","*.bmsoe"));
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile != null) {
-            imageFilePath = selectedFile.getPath();
-            dotIndex = imageFilePath.lastIndexOf(".");
-            extension = imageFilePath.substring(dotIndex);
-            if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
-                try (FileInputStream stream = new FileInputStream(selectedFile)){
-                    image = new Image(stream);
-                    imageView.setImage(image);
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            } else if (extension.equals(".msoe")) {
-                
-            }
-        }
+        File file = fileChooser.showOpenDialog(null);
+        ImageIO.read(file);
     }
 
-//    @FXML
+    public static String getImageFilePath() {
+        return imageFilePath;
+    }
+
+    public static void setImageFilePath(String imageFilePath) {
+        Controller.imageFilePath = imageFilePath;
+    }
+
+    public static String getImageFileExtension() {
+        return imageFileExtension;
+    }
+
+    public static void setImageFileExtension(String imageFileExtension) {
+        Controller.imageFileExtension = imageFileExtension;
+    }
+
+    public ImageView getImageView() {
+        return imageView;
+    }
+
+    public void setImageView(ImageView imageView) {
+        this.imageView = imageView;
+    }
+
+    //    @FXML
 //    private void
 
 }
