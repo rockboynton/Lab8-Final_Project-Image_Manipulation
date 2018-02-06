@@ -29,13 +29,13 @@
             <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" GridPane.columnIndex="1" GridPane.vgrow="NEVER">
                <children>
                   <Button fx:id="openButton" mnemonicParsing="false" onAction="#open" prefWidth="100.0" text="Open" />
-                  <Button mnemonicParsing="false" prefWidth="100.0" text="Save" />
-                  <Button layoutX="10.0" layoutY="41.0" mnemonicParsing="false" prefWidth="100.0" text="Reload" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="Grayscale" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="Red" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="Red-Gray" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="Negative" />
-                  <Button layoutX="10.0" layoutY="10.0" mnemonicParsing="false" prefWidth="100.0" text="Show FIlter" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" prefWidth="100.0" text="Save" />
+                  <Button fx:id="reloadButton" layoutX="10.0" layoutY="41.0" mnemonicParsing="false" onAction="#reload" prefWidth="100.0" text="Reload" />
+                  <Button fx:id="grasyscaleButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#grayscale" prefWidth="100.0" text="Grayscale" />
+                  <Button fx:id="redButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#red" prefWidth="100.0" text="Red" />
+                  <Button fx:id="redGrayButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#redGray" prefWidth="100.0" text="Red-Gray" />
+                  <Button fx:id="negativeButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#negative" prefWidth="100.0" text="Negative" />
+                  <Button fx:id="filterButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#filter" prefWidth="100.0" text="Show FIlter" />
                </children>
             </VBox>
             <ImageView fx:id="imageView" fitHeight="330.0" fitWidth="274.0" pickOnBounds="true" preserveRatio="true" />
