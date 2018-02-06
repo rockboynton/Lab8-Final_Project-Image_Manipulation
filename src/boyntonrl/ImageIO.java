@@ -1,10 +1,7 @@
 package boyntonrl;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.Image;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import javafx.scene.paint.Color;
 
 import java.io.*;
@@ -16,6 +13,7 @@ import java.util.InputMismatchException;
 public class ImageIO {
 
     public static final int HEX = 16;
+    public static final String msoeFileHeader = "MSOE";
 
     private static Image currentImage;
 
@@ -36,7 +34,6 @@ public class ImageIO {
         } else {
             throw new IOException();
         }
-        currentImage = image;
         return image;
     }
 
@@ -49,13 +46,10 @@ public class ImageIO {
     public static void write(Image image, File file) throws IOException {
         // TODO
         String path = file.getPath();
-        System.out.println(path);
         String extension = path.substring(path.lastIndexOf("."));
-        System.out.println(extension);
         if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
             javax.imageio.ImageIO.write(SwingFXUtils.fromFXImage(image, null), extension
                     .substring(1), file);
-            System.out.println("done");
         } else if (extension.equals(".msoe")) {
             writeMSOE(image, file);
         } else {
@@ -85,33 +79,54 @@ public class ImageIO {
             height = Integer.parseInt(dimensions[1]);
             image = new WritableImage(width, height);
             writer = image.getPixelWriter();
-//            for (int row = 0; row < height; row++) {
-//                pixels = br.readLine().split("\\s+");
-////                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-//                for (int column = 0; column < width; column++) {
-////                    System.out.println(row + " " + column);
-//                    color = stringToColor(pixels[column]);
-////                    System.out.println(color);
-//                    writer.setColor(column, row, color);
-//                }
-//            }
-            String line = br.readLine();
-            int lineNumber = 0;
-            while (line != null) {
-                pixels = line.split("\\s+");
-                for (int i = 0; i < width; i++) {
-                    color = stringToColor(pixels[i]);
-                    writer.setColor(i, lineNumber, color);
+            for (int row = 0; row < height; row++) {
+                pixels = br.readLine().split("\\s+");
+                for (int column = 0; column < width; column++) {
+                    color = stringToColor(pixels[column]);
+                    writer.setColor(column, row, color);
                 }
-                line = br.readLine();
-                lineNumber++;
             }
+
+//            String line = br.readLine();
+//            int lineNumber = 0;
+//            while (line != null) {
+//                pixels = line.split("\\s+");
+//                for (int i = 0; i < width; i++) {
+//                    color = stringToColor(pixels[i]);
+//                    writer.setColor(i, lineNumber, color);
+//                }
+//                line = br.readLine();
+//                lineNumber++;
+//            }
+        } catch (IOException ioe) {
+            throw ioe;
+        } catch (IndexOutOfBoundsException ioob) {
+            throw ioob;
         }
         return image;
     }
 
     private static void writeMSOE(Image image, File file) {
         // TODO
+        double width;
+        double height;
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            width = image.getWidth();
+            height = image.getHeight();
+            writer.println(msoeFileHeader);
+            writer.println(image.getWidth() + " " + image.getHeight());
+            PixelReader reader = image.getPixelReader();
+            for (int row = 0; row < height; row++) {
+                pixels = br.readLine().split("\\s+");
+                for (int column = 0; column < width; column++) {
+                    color = stringToColor(pixels[column]);
+                    writer.setColor(column, row, color);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 //    private static Image readBMSOE(File file) throws IOException{
@@ -126,7 +141,7 @@ public class ImageIO {
         // checks valid length, # indicating hex, and valid hex color string
         System.out.println(colorStr);
         if (colorStr.length() != 9 || colorStr.charAt(0) != '#' || !colorStr.substring(1).matches
-                ("[0-9A-F]+")) {
+                ("[0-9A-Fa-f]+")) {
             throw new InputMismatchException("invalid hex color");
         }
         return new Color(

@@ -16,7 +16,7 @@ public class Controller {
     private final static Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
     private static Image image;
-    private static Image tranformedImage = image;
+    private static Image transformedImage = image;
 
 
     @FXML
@@ -49,7 +49,7 @@ public class Controller {
                         "*.jpg", "*.gif", "*.msoe","*.bmsoe"));
         File file = fileChooser.showSaveDialog(null);
         try {
-            ImageIO.write(tranformedImage, file);
+            ImageIO.write(transformedImage, file);
         } catch (IOException e1) {
             e1.printStackTrace();
         } catch (IndexOutOfBoundsException e2) {
@@ -60,7 +60,7 @@ public class Controller {
     @FXML
     private void reload(ActionEvent e) {
         imageView.setImage(image);
-        tranformedImage = image;
+        transformedImage = image;
     }
 
     @FXML
@@ -68,7 +68,7 @@ public class Controller {
         WritableImage newImage;
         int width = (int) image.getWidth();
         int height = (int) image.getHeight();
-         newImage = new WritableImage(width, height);
+        newImage = new WritableImage(width, height);
         PixelWriter writer = newImage.getPixelWriter();
         PixelReader reader = image.getPixelReader();
         Color grayPixel;
@@ -80,8 +80,8 @@ public class Controller {
                 writer.setColor(x,y, grayPixel);
             }
         }
-        tranformedImage = newImage;
-        imageView.setImage(tranformedImage);
+        transformedImage = newImage;
+        imageView.setImage(transformedImage);
     }
 
     @FXML
@@ -115,8 +115,8 @@ public class Controller {
                 writer.setColor(x,y, negativePixel);
             }
         }
-        tranformedImage = newImage;
-        imageView.setImage(tranformedImage);
+        transformedImage = newImage;
+        imageView.setImage(transformedImage);
     }
 
     @FXML
