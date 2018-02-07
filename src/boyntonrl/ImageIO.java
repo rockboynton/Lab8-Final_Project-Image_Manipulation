@@ -1,10 +1,26 @@
+/*
+ * SE1021 - 021
+ * Winter 2017
+ * Lab: Lab 8 Final Project - Image Manipulation
+ * Name: Rock Boynton
+ * Created: 2/1/18
+ */
+
 package boyntonrl;
 
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.InputMismatchException;
 
 /**
@@ -12,10 +28,18 @@ import java.util.InputMismatchException;
  */
 public class ImageIO {
 
+    /**
+     * Radix for hexadecimal numbers
+     */
     public static final int HEX = 16;
-    public static final String msoeFileHeader = "MSOE";
-
-    private static Image currentImage;
+    /**
+     * String specifying the first line of an MSOE file.
+     */
+    public static final String MSOE_FILE_HEADER = "MSOE";
+    /**
+     * Integer value of a color or alpha
+     */
+    public static final int COLOR_RANGE = 255;
 
     /**
      * Reads in the specified image file and returns a javafx.scene.image.Image object containing
@@ -55,7 +79,6 @@ public class ImageIO {
         } else {
             throw new IOException();
         }
-        currentImage = image;
     }
 
     private static Image readMSOE(File file) throws IndexOutOfBoundsException, IOException {
@@ -75,7 +98,6 @@ public class ImageIO {
                 throw new IOException(); // msoe file not formatted properly
             }
             width = Integer.parseInt(dimensions[0]);
-            System.out.println(width);
             height = Integer.parseInt(dimensions[1]);
             image = new WritableImage(width, height);
             writer = image.getPixelWriter();
@@ -107,22 +129,23 @@ public class ImageIO {
     }
 
     private static void writeMSOE(Image image, File file) {
-        // TODO
-        double width;
-        double height;
+        int width;
+        int height;
+        String pixel;
 
         try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
-            width = image.getWidth();
-            height = image.getHeight();
-            writer.println(msoeFileHeader);
-            writer.println(image.getWidth() + " " + image.getHeight());
+            width = (int) image.getWidth();
+            height = (int) image.getHeight();
+            writer.println(MSOE_FILE_HEADER);
+            writer.println(width + " " + height);
             PixelReader reader = image.getPixelReader();
+
             for (int row = 0; row < height; row++) {
-                pixels = br.readLine().split("\\s+");
                 for (int column = 0; column < width; column++) {
-                    color = stringToColor(pixels[column]);
-                    writer.setColor(column, row, color);
+                    pixel = colorToString(reader.getColor(column, row));
+                    writer.print(pixel + " ");
                 }
+                writer.println();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -130,7 +153,6 @@ public class ImageIO {
     }
 
 //    private static Image readBMSOE(File file) throws IOException{
-//        // TODO
 //    }
 
     private static void writeBMSOE(Image image, File file) {
@@ -139,29 +161,26 @@ public class ImageIO {
 
     private static Color stringToColor(String colorStr) throws InputMismatchException {
         // checks valid length, # indicating hex, and valid hex color string
-        System.out.println(colorStr);
-        if (colorStr.length() != 9 || colorStr.charAt(0) != '#' || !colorStr.substring(1).matches
-                ("[0-9A-Fa-f]+")) {
-            throw new InputMismatchException("invalid hex color");
+        if (colorStr.length() != 9 || colorStr.charAt(0) != '#' || !colorStr.substring(1).matches(
+                "[0-9A-Fa-f]+")) {
+            throw new InputMismatchException("invalid hex color: " + colorStr);
         }
         return new Color(
-                (double) Integer.valueOf(colorStr.substring(1, 3), HEX) / 255,
-                (double) Integer.valueOf(colorStr.substring(3, 5), HEX) / 255,
-                (double) Integer.valueOf(colorStr.substring(5, 7), HEX) / 255,
-                (double) Integer.valueOf(colorStr.substring(7, 9), HEX) / 255) ;
+                (double) Integer.valueOf(colorStr.substring(1, 3), HEX) / COLOR_RANGE,
+                (double) Integer.valueOf(colorStr.substring(3, 5), HEX) / COLOR_RANGE,
+                (double) Integer.valueOf(colorStr.substring(5, 7), HEX) / COLOR_RANGE,
+                (double) Integer.valueOf(colorStr.substring(7, 9), HEX) / COLOR_RANGE);
 
     }
 
     private static String colorToString(Color color) {
 
-        // FIXME return a hex value for msoe format
-        int red = Integer.valueOf("" + (int) (color.getRed() * 255), HEX);
-        int green = (int) color.getGreen() * 255;
-        int blue = (int) color.getBlue() * 255;
-        int alpha = (int) color.getOpacity() * 255;
+        int red = (int) (color.getRed() * COLOR_RANGE);
+        int green = (int) (color.getGreen() * COLOR_RANGE);
+        int blue = (int) (color.getBlue() * COLOR_RANGE);
+        int alpha = (int) (color.getOpacity() * COLOR_RANGE);
 
-
-        return "#" + red + green + blue + alpha;
+        return String.format("#%02X%02X%02X%02X", red, green, blue, alpha);
     }
 
 }

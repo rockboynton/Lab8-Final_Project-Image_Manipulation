@@ -46,14 +46,19 @@ public class Controller {
         fileChooser.setTitle("Save New Image File");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Image Files", "*.png",
-                        "*.jpg", "*.gif", "*.msoe","*.bmsoe"));
+                        "*.jpg", "*.gif", "*.msoe", "*.bmsoe"));
         File file = fileChooser.showSaveDialog(null);
         try {
-            ImageIO.write(transformedImage, file);
+            if (imageView.getImage() == null) {
+                throw new NullPointerException();
+            }
+            ImageIO.write(imageView.getImage(), file);
         } catch (IOException e1) {
             e1.printStackTrace();
         } catch (IndexOutOfBoundsException e2) {
             e2.printStackTrace(); // TODO add alert and log
+        } catch (NullPointerException e3) {
+
         }
     }
 
