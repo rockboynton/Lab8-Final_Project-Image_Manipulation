@@ -152,4 +152,16 @@ public class ImageIO {
 
     }
 
+    private static String colorToString(Color color) {
+
+        // FIXME return a hex value for msoe format
+        int red = Integer.valueOf("" + (int) (color.getRed() * 255), HEX);
+        int green = (int) color.getGreen() * 255;
+        int blue = (int) color.getBlue() * 255;
+        int alpha = (int) color.getOpacity() * 255;
+
+
+        return "#" + red + green + blue + alpha;
+    }
+
 }
