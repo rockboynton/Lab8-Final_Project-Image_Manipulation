@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
  * and y location of the pixel and its color. The method must return the color for the pixel
  * after the applying the transformation.
  */
+@FunctionalInterface
 public interface Transformable {
-
     Color transform(int x, int y, Color color);
 }
