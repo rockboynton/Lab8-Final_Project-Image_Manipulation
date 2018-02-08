@@ -9,6 +9,7 @@
 package boyntonrl;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
@@ -22,11 +23,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.InputMismatchException;
+import java.util.logging.Logger;
 
 /**
  * This class is responsible for loading and saving images
  */
 public class ImageIO {
+
+    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
 
     /**
      * Radix for hexadecimal numbers
@@ -45,18 +49,25 @@ public class ImageIO {
      * Reads in the specified image file and returns a javafx.scene.image.Image object containing
      * the image.
      * @param file the specified image file
-     * @return
+     * @return image from the specified file
      */
-    public static Image read(File file) throws IndexOutOfBoundsException, IOException {
-        Image image;
+    public static Image read(File file) {
+        Image image = null;
         String path = file.getPath();
         String extension = path.substring(path.lastIndexOf("."));
-        if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
-            image = new Image(file.toURI().toString());
-        } else if (extension.equals(".msoe")) {
-            image = readMSOE(file);
-        } else {
-            throw new IOException();
+        try {
+            // Java supported image format (.jpg,.png,.gif)
+            if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) {
+                image = new Image(file.toURI().toString());
+            } else if (extension.equals(".msoe")) {
+                image = readMSOE(file);
+            } else {
+                throw new IOException();
+            }
+        } catch (IndexOutOfBoundsException e) {
+            showReadFailureAlert();
+        } catch (IOException e) {
+            showReadFailureAlert();
         }
         return image;
     }
@@ -65,25 +76,29 @@ public class ImageIO {
      * Writes the specified image to the specified file.
      * @param image image to be saved
      * @param file new image file to be created
-     * @throws IOException
      */
-    public static void write(Image image, File file) throws IOException {
-        // TODO
+    public static void write(Image image, File file) {
         String path = file.getPath();
+//        String name = path.substring(0, path.lastIndexOf("."));
+//        String extension = name.substring(name.lastIndexOf("."));
         String extension = path.substring(path.lastIndexOf("."));
-        if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
-            javax.imageio.ImageIO.write(SwingFXUtils.fromFXImage(image, null), extension
-                    .substring(1), file);
-        } else if (extension.equals(".msoe")) {
-            writeMSOE(image, file);
-        } else {
-            throw new IOException();
+        try {
+            if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
+                javax.imageio.ImageIO.write(SwingFXUtils.fromFXImage(image, null), extension
+                        .substring(1), file);
+            } else if (extension.equals(".msoe")) {
+                writeMSOE(image, file);
+            } else {
+                throw new IOException();
+            }
+            showSaveSuccessfulAlert();
+        } catch (IOException e) {
+            showUnsupportedFileTypeAlert(extension);
         }
     }
 
-    private static Image readMSOE(File file) throws IndexOutOfBoundsException, IOException {
-        // TODO
-        WritableImage image;
+    private static Image readMSOE(File file) {
+        WritableImage image = null;
         PixelWriter writer;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -95,7 +110,7 @@ public class ImageIO {
             Color color;
 
             if (!header.equals("MSOE")) {
-                throw new IOException(); // msoe file not formatted properly
+                throw new InputMismatchException(); // msoe file not formatted properly
             }
             width = Integer.parseInt(dimensions[0]);
             height = Integer.parseInt(dimensions[1]);
@@ -108,22 +123,21 @@ public class ImageIO {
                     writer.setColor(column, row, color);
                 }
             }
-
-//            String line = br.readLine();
-//            int lineNumber = 0;
-//            while (line != null) {
-//                pixels = line.split("\\s+");
-//                for (int i = 0; i < width; i++) {
-//                    color = stringToColor(pixels[i]);
-//                    writer.setColor(i, lineNumber, color);
-//                }
-//                line = br.readLine();
-//                lineNumber++;
-//            }
         } catch (IOException ioe) {
-            throw ioe;
-        } catch (IndexOutOfBoundsException ioob) {
-            throw ioob;
+            // show alert
+            showReadFailureAlert();
+            // log
+
+        } catch (InputMismatchException ime) {
+            // show alert
+            showReadFailureAlert();
+            // log
+        } catch (IndexOutOfBoundsException iob) {
+            showReadFailureAlert();
+            image = null;
+        } catch (NullPointerException npe) {
+            showReadFailureAlert();
+            image = null;
         }
         return image;
     }
@@ -148,12 +162,15 @@ public class ImageIO {
                 writer.println();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            showSaveFailureAlert();
         }
     }
 
-//    private static Image readBMSOE(File file) throws IOException{
-//    }
+    private static Image readBMSOE(File file) {
+        WritableImage image = null;
+        // TODO
+        return image;
+    }
 
     private static void writeBMSOE(Image image, File file) {
         // TODO
@@ -170,7 +187,7 @@ public class ImageIO {
                 (double) Integer.valueOf(colorStr.substring(3, 5), HEX) / COLOR_RANGE,
                 (double) Integer.valueOf(colorStr.substring(5, 7), HEX) / COLOR_RANGE,
                 (double) Integer.valueOf(colorStr.substring(7, 9), HEX) / COLOR_RANGE);
-
+                // I wouldn't consider those magic numbers
     }
 
     private static String colorToString(Color color) {
@@ -183,4 +200,35 @@ public class ImageIO {
         return String.format("#%02X%02X%02X%02X", red, green, blue, alpha);
     }
 
+    private static void showSaveFailureAlert() {
+        Alert saveFailureAlert = new Alert(Alert.AlertType.ERROR, "Error: Could not " +
+                "save image to specified file. ");
+        saveFailureAlert.setTitle("Error Dialog");
+        saveFailureAlert.setHeaderText("Save Failure");
+        saveFailureAlert.showAndWait();
+    }
+
+    private static void showReadFailureAlert() {
+        Alert readFailureAlert = new Alert(Alert.AlertType.ERROR, "Error: Could not " +
+                "read image from specified file. File may be corrupt ");
+        readFailureAlert.setTitle("Error Dialog");
+        readFailureAlert.setHeaderText("Read Failure");
+        readFailureAlert.showAndWait();
+    }
+
+    private static void showUnsupportedFileTypeAlert(String extension) {
+        Alert unsupportedFileTypeAlert = new Alert(Alert.AlertType.ERROR, "Error: " +
+                "the file entered could not be saved");
+        unsupportedFileTypeAlert.setTitle("Error Dialog");
+        unsupportedFileTypeAlert.setHeaderText("Invalid file type " + extension);
+        unsupportedFileTypeAlert.showAndWait();
+    }
+
+    private static void showSaveSuccessfulAlert() {
+        Alert saveSuccessfulAlert = new Alert(Alert.AlertType.INFORMATION, "Your " +
+                "image saved successfully!");
+        saveSuccessfulAlert.setTitle("Message Dialog");
+        saveSuccessfulAlert.setHeaderText("Save Success");
+        saveSuccessfulAlert.showAndWait();
+    }
 }
