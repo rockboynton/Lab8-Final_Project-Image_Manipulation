@@ -16,13 +16,13 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.InputMismatchException;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class ImageIO {
 
-    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
+    private static final Logger LOGGER = Lab8.LOGGER;
 
     /**
      * Radix for hexadecimal numbers
@@ -41,9 +41,13 @@ public class ImageIO {
      */
     public static final String MSOE_FILE_HEADER = "MSOE";
     /**
+     * char sequence specifying the first four bytes of a BMSOE file.
+     */
+    public static final char[] BMSOE_FILE_HEADER = {'B', 'M', 'S', 'O', 'E'};
+    /**
      * Integer value of a color or alpha
      */
-    public static final int COLOR_RANGE = 255;
+    public static final double COLOR_RANGE = 255.0;
 
     /**
      * Reads in the specified image file and returns a javafx.scene.image.Image object containing
@@ -61,6 +65,8 @@ public class ImageIO {
                 image = new Image(file.toURI().toString());
             } else if (extension.equals(".msoe")) {
                 image = readMSOE(file);
+            } else if (extension.equals(".bmsoe")) {
+                image = readBMSOE(file);
             } else {
                 throw new IOException();
             }
@@ -127,17 +133,25 @@ public class ImageIO {
             // show alert
             showReadFailureAlert();
             // log
-
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ioe);
         } catch (InputMismatchException ime) {
             // show alert
             showReadFailureAlert();
             // log
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ime);
+
         } catch (IndexOutOfBoundsException iob) {
             showReadFailureAlert();
             image = null;
+            // log
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", iob);
+
         } catch (NullPointerException npe) {
             showReadFailureAlert();
             image = null;
+            // log
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", npe);
+
         }
         return image;
     }
@@ -167,8 +181,65 @@ public class ImageIO {
     }
 
     private static Image readBMSOE(File file) {
-        WritableImage image = null;
         // TODO
+        WritableImage image = null;
+        PixelWriter writer;
+
+        try (DataInputStream data = new DataInputStream(new FileInputStream(file))) {
+            char[] header = new char[5];
+            int width;
+            int height;
+            Color color;
+            double r;
+            double g;
+            double b;
+            double a;
+
+            for (int i = 0; i < 5; i++) {
+                header[i] = (char) data.readUnsignedByte();
+            }
+            if (!Arrays.equals(header, BMSOE_FILE_HEADER)) {
+                throw new InputMismatchException(); // bmsoe file not formatted properly
+            }
+            width = data.readInt();
+            height = data.readInt();
+            Color[] pixelsInRow = new Color[width];
+            image = new WritableImage(width, height);
+            writer = image.getPixelWriter();
+            for (int row = 0; row < height; row++) {
+                for (int i = 0; i < width; i++) {
+                    r =  data.readUnsignedByte() / COLOR_RANGE;
+                    g =  data.readUnsignedByte() / COLOR_RANGE;
+                    b =  data.readUnsignedByte() / COLOR_RANGE;
+                    a =  data.readUnsignedByte() / COLOR_RANGE;
+                    System.out.println(a);
+                    pixelsInRow[i] = new Color(r, g, b, a);
+                }
+                for (int column = 0; column < width; column++) {
+                    color = pixelsInRow[column];
+                    writer.setColor(column, row, color);
+                }
+            }
+        } catch (IOException ioe) {
+            // show alert
+            showReadFailureAlert();
+            // log
+
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ioe);
+        } catch (InputMismatchException ime) {
+            // show alert
+            showReadFailureAlert();
+            // log
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ime);
+        } catch (IndexOutOfBoundsException iob) {
+            showReadFailureAlert();
+            image = null;
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", iob);
+        } catch (NullPointerException npe) {
+            showReadFailureAlert();
+            image = null;
+            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", npe);
+        }
         return image;
     }
 
@@ -183,10 +254,10 @@ public class ImageIO {
             throw new InputMismatchException("invalid hex color: " + colorStr);
         }
         return new Color(
-                (double) Integer.valueOf(colorStr.substring(1, 3), HEX) / COLOR_RANGE,
-                (double) Integer.valueOf(colorStr.substring(3, 5), HEX) / COLOR_RANGE,
-                (double) Integer.valueOf(colorStr.substring(5, 7), HEX) / COLOR_RANGE,
-                (double) Integer.valueOf(colorStr.substring(7, 9), HEX) / COLOR_RANGE);
+                Integer.valueOf(colorStr.substring(1, 3), HEX) / COLOR_RANGE,
+                Integer.valueOf(colorStr.substring(3, 5), HEX) / COLOR_RANGE,
+                Integer.valueOf(colorStr.substring(5, 7), HEX) / COLOR_RANGE,
+                Integer.valueOf(colorStr.substring(7, 9), HEX) / COLOR_RANGE);
                 // I wouldn't consider those magic numbers
     }
 

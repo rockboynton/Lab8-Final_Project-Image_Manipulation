@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class Controller {
 
-    private static final Logger LOGGER = Logger.getLogger(Controller.class.getName());
+    private static final Logger LOGGER = Lab8.LOGGER;
 
     private static Image image;
     private static Image transformedImage;
@@ -63,7 +63,9 @@ public class Controller {
                     new FileChooser.ExtensionFilter("Image Files", "*.png",
                             "*.jpg", "*.gif", "*.msoe", "*.bmsoe"));
             File file = fileChooser.showSaveDialog(null);
-            ImageIO.write(imageView.getImage(), file);
+            if (file != null) {
+                ImageIO.write(imageView.getImage(), file);
+            }
         } else {
             // alert saying no image is loaded yet
             showImageNotLoadedAlert();

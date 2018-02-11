@@ -16,6 +16,6 @@ import javafx.scene.paint.Color;
  * after the applying the transformation.
  */
 @FunctionalInterface
-public interface Transformable {
+interface Transformable {
     Color transform(int x, int y, Color color);
 }
