@@ -44,7 +44,8 @@ public class Lab8 extends Application {
 
 
     /**
-     * Start method of Lab8 Application
+     * Start method of Lab8 Application.
+     * //TODO
      * @param primaryStage main stage of program
      * @throws Exception if something goes wrong
      */
@@ -80,10 +81,6 @@ public class Lab8 extends Application {
 
     }
 
-    /**
-     * Main method of the Lab8 Application
-     * @param args needed to run the program
-     */
     public static void main(String[] args) {
         launch(args);
     }

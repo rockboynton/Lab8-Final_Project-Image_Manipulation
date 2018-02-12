@@ -209,7 +209,6 @@ public class ImageIO {
                     g = data.readUnsignedByte() / COLOR_RANGE;
                     b = data.readUnsignedByte() / COLOR_RANGE;
                     a = data.readUnsignedByte() / COLOR_RANGE;
-                    System.out.println(a);
                     pixelsInRow[i] = new Color(r, g, b, a);
                 }
                 for (int column = 0; column < width; column++) {
@@ -244,14 +243,33 @@ public class ImageIO {
         // TODO
         int width;
         int height;
-        String pixel;
+        double r;
+        double g;
+        double b;
+        double a;
+        Color pixel;
 
         try (DataOutputStream data = new DataOutputStream(new FileOutputStream(file))) {
             width = (int) image.getWidth();
             height = (int) image.getHeight();
             for (int i = 0; i < BMSOE_FILE_HEADER.length; i++) {
-//                data.
+                data.write(BMSOE_FILE_HEADER[i]);
             }
+            data.write(width);
+            data.write(height);
+            PixelReader reader = image.getPixelReader();
+            for (int row = 0; row < height; row++) {
+                for (int column = 0; column < width; column++) {
+                    pixel = reader.getColor(column, row);
+                    // FIXME
+                    data.write((int) (pixel.getRed() * COLOR_RANGE));
+                    data.write((int) (pixel.getGreen() * COLOR_RANGE));
+                    data.write((int) (pixel.getBlue() * COLOR_RANGE));
+                    data.write((int) (pixel.getOpacity() * COLOR_RANGE));
+                    new Color()
+                }
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

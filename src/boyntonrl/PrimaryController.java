@@ -34,11 +34,8 @@ public class PrimaryController {
     private static final Logger LOGGER = Lab8.LOGGER;
 
     private Stage kernelStage;
-
     private Image image;
     private Image transformedImage;
-
-
 
     @FXML
     private ImageView imageView;
@@ -133,8 +130,8 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-            Transformable grayTransform = ((x, y, color) -> color.grayscale()); // how would i
-            // use double colon here?
+            // how would i use double colon here?
+            Transformable grayTransform = ((x, y, color) -> color.grayscale());
             transformedImage = transformImage(image, grayTransform);
             imageView.setImage(transformedImage);
         }
@@ -162,8 +159,9 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
+            // how would i use double colon here?
             Transformable redTransform = ((x, y, color) -> new Color(color.getRed(), 0,
-                    0, color.getOpacity())); // how would i use double colon here?
+                    0, color.getOpacity()));
             transformedImage = transformImage(image, redTransform);
             imageView.setImage(transformedImage);
         }
@@ -197,16 +195,17 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
+                // how would i use double colon here?
             Transformable redGrayTransform = ((x, y, color) -> {
                 Color newColor;
-                if (y / 2 == 0) {
+                if (y % 2 == 0) {
                     newColor = new Color(color.getRed(), 0,
                             0, color.getOpacity());
                 } else {
                     newColor = color.grayscale();
                 }
                 return newColor;
-            }); // how would i use double colon here?
+            });
             transformedImage = transformImage(image, redGrayTransform);
             imageView.setImage(transformedImage);
         }
@@ -234,8 +233,8 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-            Transformable negativeTransform = ((x, y, color) -> color.invert()); // how would i use
-            // double colon here?
+            // how would i use double colon here?
+            Transformable negativeTransform = ((x, y, color) -> color.invert());
             transformedImage = transformImage(image, negativeTransform);
             imageView.setImage(transformedImage);
         }
@@ -259,6 +258,4 @@ public class PrimaryController {
         imageNotLoadedAlert.setHeaderText("Image Not found");
         imageNotLoadedAlert.showAndWait();
     }
-
-
 }
