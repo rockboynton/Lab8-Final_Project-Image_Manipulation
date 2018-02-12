@@ -264,11 +264,11 @@ public class ImageIO {
             throw new InputMismatchException("invalid hex color: " + colorStr);
         }
         return new Color(
+                // extracting four 2-digit hex values from a string
                 Integer.valueOf(colorStr.substring(1, 3), HEX) / COLOR_RANGE,
                 Integer.valueOf(colorStr.substring(3, 5), HEX) / COLOR_RANGE,
                 Integer.valueOf(colorStr.substring(5, 7), HEX) / COLOR_RANGE,
                 Integer.valueOf(colorStr.substring(7, 9), HEX) / COLOR_RANGE);
-                // I wouldn't consider those magic numbers
     }
 
     private static String colorToString(Color color) {

@@ -43,6 +43,11 @@ public class Lab8 extends Application {
     private static final int FILTER_HEIGHT = 191;
 
 
+    /**
+     * Start method of Lab8 Application
+     * @param primaryStage main stage of program
+     * @throws Exception if something goes wrong
+     */
     @Override
     public void start(Stage primaryStage) throws Exception{
 
@@ -75,6 +80,10 @@ public class Lab8 extends Application {
 
     }
 
+    /**
+     * Main method of the Lab8 Application
+     * @param args needed to run the program
+     */
     public static void main(String[] args) {
         launch(args);
     }
