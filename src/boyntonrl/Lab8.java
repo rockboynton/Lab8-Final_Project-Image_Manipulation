@@ -15,7 +15,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -29,49 +28,52 @@ import java.util.logging.SimpleFormatter;
  * formats
  */
 public class Lab8 extends Application {
-
+    /**
+     * Logger for Lab8 application. Logs to the text file "Lab8.txt"
+     */
     public static final Logger LOGGER = Logger.getLogger(ImageIO.class.getName());
-    public static Path path = Paths.get("Lab8.txt");
+    private static Path path = Paths.get("Lab8.txt");
 
-    /**
-     * Width of the primary stage
-     */
-    public static final int WIDTH = 500;
-    /**
-     * Height of the primary stage
-     */
-    public static final int HEIGHT = 500;
+    private static final int X_OFFSET = 1535;
+    private static final int Y_OFFSET = 595;
 
-    private Stage filterKernelStage;
-    private Controller kernelController;
-    private Controller primaryController;
+    private static final int PRIMARY_WIDTH = 500;
+    private static final int PRIMARY_HEIGHT = 500;
+    private static final int FILTER_WIDTH = 357;
+    private static final int FILTER_HEIGHT = 191;
+
 
     @Override
     public void start(Stage primaryStage) throws Exception{
 
-        FXMLLoader primaryLoader = new FXMLLoader();
-        FXMLLoader kernelLoader = new FXMLLoader();
-
         setUpLogger();
         LOGGER.log(Level.INFO, "User opened application");
 
+        FXMLLoader primaryLoader = new FXMLLoader();
+        FXMLLoader kernelLoader = new FXMLLoader();
+
         Parent primaryRoot = primaryLoader.load(getClass().getResource("lab8.fxml").openStream());
         primaryStage.setTitle("Image Manipulator");
-        primaryStage.setScene(new Scene(primaryRoot, WIDTH, HEIGHT));
+        primaryStage.setScene(new Scene(primaryRoot, PRIMARY_WIDTH, PRIMARY_HEIGHT));
+        primaryStage.setResizable(false);
 
+        Stage filterKernelStage = new Stage();
         Parent filterKernelRoot = kernelLoader.load(getClass().getResource("kernelUI.fxml")
                 .openStream());
-        filterKernelStage = new Stage();
         filterKernelStage.setTitle("Filter Kernel");
-        filterKernelStage.setScene(new Scene(filterKernelRoot, WIDTH, HEIGHT));
+        filterKernelStage.setScene(new Scene(filterKernelRoot, FILTER_WIDTH, FILTER_HEIGHT));
+        filterKernelStage.setResizable(false);
+        filterKernelStage.setX(X_OFFSET);
+        filterKernelStage.setY(Y_OFFSET);
 
-        primaryController = primaryLoader.getController();
-        kernelController = kernelLoader.getController();
+        PrimaryController primaryController = primaryLoader.getController();
+        primaryController.setKernelStage(filterKernelStage);
+        KernelController kernelController = kernelLoader.getController();
+        kernelController.setStage(filterKernelStage);
 
         primaryStage.show();
 
     }
-
 
     public static void main(String[] args) {
         launch(args);
@@ -92,7 +94,6 @@ public class Lab8 extends Application {
         }
     }
 
-    public Stage getFilterKernelStage() {
-        return filterKernelStage;
-    }
+
+
 }

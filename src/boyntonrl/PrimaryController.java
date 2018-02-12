@@ -11,6 +11,7 @@ package boyntonrl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
@@ -18,6 +19,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 import java.io.File;
@@ -27,16 +29,23 @@ import java.util.logging.Logger;
 /**
  * Controller class for the Lab8 JavaFX application to handle program logic.
  */
-public class Controller {
+public class PrimaryController {
 
     private static final Logger LOGGER = Lab8.LOGGER;
 
-    private static Image image;
-    private static Image transformedImage;
+    private Stage kernelStage;
 
+    private Image image;
+    private Image transformedImage;
+
+    public void setKernelStage(Stage kernelStage) {
+        this.kernelStage = kernelStage;
+    }
 
     @FXML
     private ImageView imageView;
+    @FXML
+    private Button filterButton;
 
     @FXML
     private void open(ActionEvent e) {
@@ -139,7 +148,13 @@ public class Controller {
 
     @FXML
     private void filter(ActionEvent e) {
-
+        if (kernelStage.isShowing()) {
+            kernelStage.close();
+            filterButton.setText("Show Filter");
+        } else {
+            kernelStage.show();
+            filterButton.setText("Hide Filter");
+        }
     }
 
     private void showImageNotLoadedAlert() {
