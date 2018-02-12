@@ -38,14 +38,16 @@ public class PrimaryController {
     private Image image;
     private Image transformedImage;
 
-    public void setKernelStage(Stage kernelStage) {
-        this.kernelStage = kernelStage;
-    }
+
 
     @FXML
     private ImageView imageView;
     @FXML
     private Button filterButton;
+
+    public void setKernelStage(Stage kernelStage) {
+        this.kernelStage = kernelStage;
+    }
 
     @FXML
     private void open(ActionEvent e) {
@@ -90,58 +92,151 @@ public class PrimaryController {
         transformedImage = image;
     }
 
+    private static Image transformImage(Image image, Transformable transform) {
+        WritableImage newImage;
+        int width = (int) image.getWidth();
+        int height = (int) image.getHeight();
+        newImage = new WritableImage(width, height);
+        PixelWriter writer = newImage.getPixelWriter();
+        PixelReader reader = image.getPixelReader();
+        Color newPixel;
+        Color pixel;
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                pixel = reader.getColor(x, y);
+                newPixel = transform.transform(x, y, pixel);
+                writer.setColor(x, y, newPixel);
+            }
+        }
+        return newImage;
+    }
+
     @FXML
     private void grayscale(ActionEvent e) {
+//        if (image != null) {
+//            WritableImage newImage;
+//            int width = (int) image.getWidth();
+//            int height = (int) image.getHeight();
+//            newImage = new WritableImage(width, height);
+//            PixelWriter writer = newImage.getPixelWriter();
+//            PixelReader reader = image.getPixelReader();
+//            Color grayPixel;
+//            Color pixel;
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    pixel = reader.getColor(x, y);
+//                    grayPixel = pixel.grayscale();
+//                    writer.setColor(x, y, grayPixel);
+//                }
+//            }
+//            transformedImage = newImage;
+//            imageView.setImage(transformedImage);
+//        }
         if (image != null) {
-            WritableImage newImage;
-            int width = (int) image.getWidth();
-            int height = (int) image.getHeight();
-            newImage = new WritableImage(width, height);
-            PixelWriter writer = newImage.getPixelWriter();
-            PixelReader reader = image.getPixelReader();
-            Color grayPixel;
-            Color pixel;
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    pixel = reader.getColor(x, y);
-                    grayPixel = pixel.grayscale();
-                    writer.setColor(x, y, grayPixel);
-                }
-            }
-            transformedImage = newImage;
+            Transformable grayTransform = ((x, y, color) -> color.grayscale()); // how would i
+            // use double colon here?
+            transformedImage = transformImage(image, grayTransform);
             imageView.setImage(transformedImage);
         }
     }
 
     @FXML
     private void red(ActionEvent e) {
-
+//        if (image != null) {
+//            WritableImage newImage;
+//            int width = (int) image.getWidth();
+//            int height = (int) image.getHeight();
+//            newImage = new WritableImage(width, height);
+//            PixelWriter writer = newImage.getPixelWriter();
+//            PixelReader reader = image.getPixelReader();
+//            Color redPixel;
+//            Color pixel;
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    pixel = reader.getColor(x, y);
+//                    redPixel = new Color(pixel.getRed(), 0, 0, pixel.getOpacity());
+//                    writer.setColor(x, y, redPixel);
+//                }
+//            }
+//            transformedImage = newImage;
+//            imageView.setImage(transformedImage);
+//        }
+        if (image != null) {
+            Transformable redTransform = ((x, y, color) -> new Color(color.getRed(), 0,
+                    0, color.getOpacity())); // how would i use double colon here?
+            transformedImage = transformImage(image, redTransform);
+            imageView.setImage(transformedImage);
+        }
     }
 
     @FXML
     private void redGray(ActionEvent e) {
-
+//        if (image != null) {
+//            WritableImage newImage;
+//            int width = (int) image.getWidth();
+//            int height = (int) image.getHeight();
+//            newImage = new WritableImage(width, height);
+//            PixelWriter writer = newImage.getPixelWriter();
+//            PixelReader reader = image.getPixelReader();
+//            Color redPixel;
+//            Color grayPixel;
+//            Color pixel;
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y += 2) {
+//                    pixel = reader.getColor(x, y);
+//                    redPixel = new Color(pixel.getRed(), 0, 0, pixel.getOpacity());
+//                    writer.setColor(x, y, redPixel);
+//                }
+//                for (int y = 1; y < height; y += 2) {
+//                    pixel = reader.getColor(x, y);
+//                    grayPixel = pixel.grayscale();
+//                    writer.setColor(x, y, grayPixel);
+//                }
+//            }
+//            transformedImage = newImage;
+//            imageView.setImage(transformedImage);
+//        }
+        if (image != null) {
+            Transformable redGrayTransform = ((x, y, color) -> {
+                Color newColor;
+                if (y / 2 == 0) {
+                    newColor = new Color(color.getRed(), 0,
+                            0, color.getOpacity());
+                } else {
+                    newColor = color.grayscale();
+                }
+                return newColor;
+            }); // how would i use double colon here?
+            transformedImage = transformImage(image, redGrayTransform);
+            imageView.setImage(transformedImage);
+        }
     }
 
     @FXML
     private void negative(ActionEvent e) {
+//        if (image != null) {
+//            WritableImage newImage;
+//            int width = (int) image.getWidth();
+//            int height = (int) image.getHeight();
+//            newImage = new WritableImage(width, height);
+//            PixelWriter writer = newImage.getPixelWriter();
+//            PixelReader reader = image.getPixelReader();
+//            Color negativePixel;
+//            Color pixel;
+//            for (int x = 0; x < width; x++) {
+//                for (int y = 0; y < height; y++) {
+//                    pixel = reader.getColor(x, y);
+//                    negativePixel = pixel.invert();
+//                    writer.setColor(x, y, negativePixel);
+//                }
+//            }
+//            transformedImage = newImage;
+//            imageView.setImage(transformedImage);
+//        }
         if (image != null) {
-            WritableImage newImage;
-            int width = (int) image.getWidth();
-            int height = (int) image.getHeight();
-            newImage = new WritableImage(width, height);
-            PixelWriter writer = newImage.getPixelWriter();
-            PixelReader reader = image.getPixelReader();
-            Color negativePixel;
-            Color pixel;
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    pixel = reader.getColor(x, y);
-                    negativePixel = pixel.invert();
-                    writer.setColor(x, y, negativePixel);
-                }
-            }
-            transformedImage = newImage;
+            Transformable negativeTransform = ((x, y, color) -> color.invert()); // how would i use
+            // double colon here?
+            transformedImage = transformImage(image, negativeTransform);
             imageView.setImage(transformedImage);
         }
     }

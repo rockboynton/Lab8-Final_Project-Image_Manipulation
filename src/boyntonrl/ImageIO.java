@@ -17,11 +17,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.InputMismatchException;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,7 +86,8 @@ public class ImageIO {
 //        String extension = name.substring(name.lastIndexOf("."));
         String extension = path.substring(path.lastIndexOf("."));
         try {
-            if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) { // Java supported image format (.jpg,.png,.gif)
+            // Java supported image format (.jpg,.png,.gif)
+            if (extension.equals(".png") || extension.equals(".jpg") || extension.equals(".gif")) {
                 javax.imageio.ImageIO.write(SwingFXUtils.fromFXImage(image, null), extension
                         .substring(1), file);
             } else if (extension.equals(".msoe")) {
@@ -133,24 +131,24 @@ public class ImageIO {
             // show alert
             showReadFailureAlert();
             // log
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ioe);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ioe);
         } catch (InputMismatchException ime) {
             // show alert
             showReadFailureAlert();
             // log
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ime);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ime);
 
         } catch (IndexOutOfBoundsException iob) {
             showReadFailureAlert();
             image = null;
             // log
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", iob);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", iob);
 
         } catch (NullPointerException npe) {
             showReadFailureAlert();
             image = null;
             // log
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", npe);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", npe);
 
         }
         return image;
@@ -181,12 +179,11 @@ public class ImageIO {
     }
 
     private static Image readBMSOE(File file) {
-        // TODO
         WritableImage image = null;
         PixelWriter writer;
 
         try (DataInputStream data = new DataInputStream(new FileInputStream(file))) {
-            char[] header = new char[5];
+            char[] header = new char[BMSOE_FILE_HEADER.length];
             int width;
             int height;
             Color color;
@@ -195,7 +192,7 @@ public class ImageIO {
             double b;
             double a;
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < BMSOE_FILE_HEADER.length; i++) {
                 header[i] = (char) data.readUnsignedByte();
             }
             if (!Arrays.equals(header, BMSOE_FILE_HEADER)) {
@@ -208,10 +205,10 @@ public class ImageIO {
             writer = image.getPixelWriter();
             for (int row = 0; row < height; row++) {
                 for (int i = 0; i < width; i++) {
-                    r =  data.readUnsignedByte() / COLOR_RANGE;
-                    g =  data.readUnsignedByte() / COLOR_RANGE;
-                    b =  data.readUnsignedByte() / COLOR_RANGE;
-                    a =  data.readUnsignedByte() / COLOR_RANGE;
+                    r = data.readUnsignedByte() / COLOR_RANGE;
+                    g = data.readUnsignedByte() / COLOR_RANGE;
+                    b = data.readUnsignedByte() / COLOR_RANGE;
+                    a = data.readUnsignedByte() / COLOR_RANGE;
                     System.out.println(a);
                     pixelsInRow[i] = new Color(r, g, b, a);
                 }
@@ -225,26 +222,39 @@ public class ImageIO {
             showReadFailureAlert();
             // log
 
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ioe);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ioe);
         } catch (InputMismatchException ime) {
             // show alert
             showReadFailureAlert();
             // log
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", ime);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ime);
         } catch (IndexOutOfBoundsException iob) {
             showReadFailureAlert();
             image = null;
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", iob);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", iob);
         } catch (NullPointerException npe) {
             showReadFailureAlert();
             image = null;
-            LOGGER.log(Level.WARNING,"Could not open .bmsoe file", npe);
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", npe);
         }
         return image;
     }
 
     private static void writeBMSOE(Image image, File file) {
         // TODO
+        int width;
+        int height;
+        String pixel;
+
+        try (DataOutputStream data = new DataOutputStream(new FileOutputStream(file))) {
+            width = (int) image.getWidth();
+            height = (int) image.getHeight();
+            for (int i = 0; i < BMSOE_FILE_HEADER.length; i++) {
+//                data.
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static Color stringToColor(String colorStr) throws InputMismatchException {
