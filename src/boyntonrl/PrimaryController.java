@@ -130,7 +130,6 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-            // how would i use double colon here?
             Transformable grayTransform = ((x, y, color) -> color.grayscale());
             transformedImage = transformImage(image, grayTransform);
             imageView.setImage(transformedImage);
@@ -159,7 +158,6 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-            // how would i use double colon here?
             Transformable redTransform = ((x, y, color) -> new Color(color.getRed(), 0,
                     0, color.getOpacity()));
             transformedImage = transformImage(image, redTransform);
@@ -195,7 +193,6 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-                // how would i use double colon here?
             Transformable redGrayTransform = ((x, y, color) -> {
                 Color newColor;
                 if (y % 2 == 0) {
@@ -233,7 +230,6 @@ public class PrimaryController {
 //            imageView.setImage(transformedImage);
 //        }
         if (image != null) {
-            // how would i use double colon here?
             Transformable negativeTransform = ((x, y, color) -> color.invert());
             transformedImage = transformImage(image, negativeTransform);
             imageView.setImage(transformedImage);
