@@ -92,6 +92,8 @@ public class ImageIO {
                         .substring(1), file);
             } else if (extension.equals(".msoe")) {
                 writeMSOE(image, file);
+            } else if (extension.equals(".bmsoe")) {
+                writeBMSOE(image, file);
             } else {
                 throw new IOException();
             }
@@ -178,6 +180,7 @@ public class ImageIO {
         }
     }
 
+    //FIXME
     private static Image readBMSOE(File file) {
         WritableImage image = null;
         PixelWriter writer;
@@ -243,10 +246,6 @@ public class ImageIO {
         // TODO
         int width;
         int height;
-        double r;
-        double g;
-        double b;
-        double a;
         Color pixel;
 
         try (DataOutputStream data = new DataOutputStream(new FileOutputStream(file))) {
@@ -255,8 +254,8 @@ public class ImageIO {
             for (int i = 0; i < BMSOE_FILE_HEADER.length; i++) {
                 data.write(BMSOE_FILE_HEADER[i]);
             }
-            data.write(width);
-            data.write(height);
+            data.writeInt(width);
+            data.writeInt(height);
             PixelReader reader = image.getPixelReader();
             for (int row = 0; row < height; row++) {
                 for (int column = 0; column < width; column++) {
@@ -266,10 +265,9 @@ public class ImageIO {
                     data.write((int) (pixel.getGreen() * COLOR_RANGE));
                     data.write((int) (pixel.getBlue() * COLOR_RANGE));
                     data.write((int) (pixel.getOpacity() * COLOR_RANGE));
-                    new Color()
+//                    new Color()
                 }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
