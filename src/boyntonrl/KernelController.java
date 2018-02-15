@@ -13,7 +13,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
 /**
- * TODO
+ * Controller for the filter kernel stage.
  */
 public class KernelController {
 

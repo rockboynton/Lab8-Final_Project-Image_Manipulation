@@ -21,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,6 +72,7 @@ public class PrimaryController {
             File file = fileChooser.showSaveDialog(null);
             if (file != null) {
                 ImageIO.write(imageView.getImage(), file);
+                LOGGER.info("User successfully saved file");
             }
         } else {
             // alert saying no image is loaded yet
@@ -110,25 +110,6 @@ public class PrimaryController {
 
     @FXML
     private void grayscale(ActionEvent e) {
-//        if (image != null) {
-//            WritableImage newImage;
-//            int width = (int) image.getWidth();
-//            int height = (int) image.getHeight();
-//            newImage = new WritableImage(width, height);
-//            PixelWriter writer = newImage.getPixelWriter();
-//            PixelReader reader = image.getPixelReader();
-//            Color grayPixel;
-//            Color pixel;
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    pixel = reader.getColor(x, y);
-//                    grayPixel = pixel.grayscale();
-//                    writer.setColor(x, y, grayPixel);
-//                }
-//            }
-//            transformedImage = newImage;
-//            imageView.setImage(transformedImage);
-//        }
         if (image != null) {
             Transformable grayTransform = ((x, y, color) -> color.grayscale());
             transformedImage = transformImage(image, grayTransform);
@@ -138,25 +119,6 @@ public class PrimaryController {
 
     @FXML
     private void red(ActionEvent e) {
-//        if (image != null) {
-//            WritableImage newImage;
-//            int width = (int) image.getWidth();
-//            int height = (int) image.getHeight();
-//            newImage = new WritableImage(width, height);
-//            PixelWriter writer = newImage.getPixelWriter();
-//            PixelReader reader = image.getPixelReader();
-//            Color redPixel;
-//            Color pixel;
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    pixel = reader.getColor(x, y);
-//                    redPixel = new Color(pixel.getRed(), 0, 0, pixel.getOpacity());
-//                    writer.setColor(x, y, redPixel);
-//                }
-//            }
-//            transformedImage = newImage;
-//            imageView.setImage(transformedImage);
-//        }
         if (image != null) {
             Transformable redTransform = ((x, y, color) -> new Color(color.getRed(), 0,
                     0, color.getOpacity()));
@@ -167,31 +129,6 @@ public class PrimaryController {
 
     @FXML
     private void redGray(ActionEvent e) {
-//        if (image != null) {
-//            WritableImage newImage;
-//            int width = (int) image.getWidth();
-//            int height = (int) image.getHeight();
-//            newImage = new WritableImage(width, height);
-//            PixelWriter writer = newImage.getPixelWriter();
-//            PixelReader reader = image.getPixelReader();
-//            Color redPixel;
-//            Color grayPixel;
-//            Color pixel;
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y += 2) {
-//                    pixel = reader.getColor(x, y);
-//                    redPixel = new Color(pixel.getRed(), 0, 0, pixel.getOpacity());
-//                    writer.setColor(x, y, redPixel);
-//                }
-//                for (int y = 1; y < height; y += 2) {
-//                    pixel = reader.getColor(x, y);
-//                    grayPixel = pixel.grayscale();
-//                    writer.setColor(x, y, grayPixel);
-//                }
-//            }
-//            transformedImage = newImage;
-//            imageView.setImage(transformedImage);
-//        }
         if (image != null) {
             Transformable redGrayTransform = ((x, y, color) -> {
                 Color newColor;
@@ -210,25 +147,6 @@ public class PrimaryController {
 
     @FXML
     private void negative(ActionEvent e) {
-//        if (image != null) {
-//            WritableImage newImage;
-//            int width = (int) image.getWidth();
-//            int height = (int) image.getHeight();
-//            newImage = new WritableImage(width, height);
-//            PixelWriter writer = newImage.getPixelWriter();
-//            PixelReader reader = image.getPixelReader();
-//            Color negativePixel;
-//            Color pixel;
-//            for (int x = 0; x < width; x++) {
-//                for (int y = 0; y < height; y++) {
-//                    pixel = reader.getColor(x, y);
-//                    negativePixel = pixel.invert();
-//                    writer.setColor(x, y, negativePixel);
-//                }
-//            }
-//            transformedImage = newImage;
-//            imageView.setImage(transformedImage);
-//        }
         if (image != null) {
             Transformable negativeTransform = ((x, y, color) -> color.invert());
             transformedImage = transformImage(image, negativeTransform);

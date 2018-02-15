@@ -16,7 +16,16 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.logging.Level;
@@ -67,6 +76,7 @@ public class ImageIO {
             } else {
                 throw new IOException();
             }
+            LOGGER.info("user opened image");
         } catch (IndexOutOfBoundsException e) {
             showReadFailureAlert();
         } catch (IOException e) {
@@ -130,28 +140,19 @@ public class ImageIO {
                 }
             }
         } catch (IOException ioe) {
-            // show alert
             showReadFailureAlert();
-            // log
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ioe);
         } catch (InputMismatchException ime) {
-            // show alert
             showReadFailureAlert();
-            // log
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ime);
-
         } catch (IndexOutOfBoundsException iob) {
             showReadFailureAlert();
             image = null;
-            // log
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", iob);
-
         } catch (NullPointerException npe) {
             showReadFailureAlert();
             image = null;
-            // log
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", npe);
-
         }
         return image;
     }
@@ -175,12 +176,12 @@ public class ImageIO {
                 }
                 writer.println();
             }
-        } catch (IOException e) {
+        } catch (IOException ioe) {
             showSaveFailureAlert();
+            LOGGER.log(Level.WARNING, "Could not write .msoe file", ioe);
         }
     }
 
-    //FIXME
     private static Image readBMSOE(File file) {
         WritableImage image = null;
         PixelWriter writer;
@@ -220,15 +221,10 @@ public class ImageIO {
                 }
             }
         } catch (IOException ioe) {
-            // show alert
             showReadFailureAlert();
-            // log
-
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ioe);
         } catch (InputMismatchException ime) {
-            // show alert
             showReadFailureAlert();
-            // log
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", ime);
         } catch (IndexOutOfBoundsException iob) {
             showReadFailureAlert();
@@ -238,12 +234,15 @@ public class ImageIO {
             showReadFailureAlert();
             image = null;
             LOGGER.log(Level.WARNING, "Could not open .bmsoe file", npe);
+        } catch (NegativeArraySizeException nase) {
+            showReadFailureAlert();
+            image = null;
+            LOGGER.log(Level.WARNING, "Could not open .bmsoe file", nase);
         }
         return image;
     }
 
     private static void writeBMSOE(Image image, File file) {
-        // TODO
         int width;
         int height;
         Color pixel;
@@ -260,16 +259,15 @@ public class ImageIO {
             for (int row = 0; row < height; row++) {
                 for (int column = 0; column < width; column++) {
                     pixel = reader.getColor(column, row);
-                    // FIXME
                     data.write((int) (pixel.getRed() * COLOR_RANGE));
                     data.write((int) (pixel.getGreen() * COLOR_RANGE));
                     data.write((int) (pixel.getBlue() * COLOR_RANGE));
                     data.write((int) (pixel.getOpacity() * COLOR_RANGE));
-//                    new Color()
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException ioe) {
+            showSaveFailureAlert();
+            LOGGER.log(Level.WARNING, "Could not write .bmsoe file", ioe);
         }
     }
 

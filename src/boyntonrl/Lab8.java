@@ -15,9 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,21 +30,21 @@ public class Lab8 extends Application {
     /**
      * Logger for Lab8 application. Logs to the text file "Lab8.txt"
      */
-    public static final Logger LOGGER = Logger.getLogger(ImageIO.class.getName());
-    private static Path path = Paths.get("Lab8.txt");
+    public static final Logger LOGGER = Logger.getLogger(Lab8.class.getName());
 
-    private static final int X_OFFSET = 1535;
-    private static final int Y_OFFSET = 595;
+    private static final int X_OFFSET = 1450;
+    private static final int Y_OFFSET = 800;
 
-    private static final int PRIMARY_WIDTH = 500;
-    private static final int PRIMARY_HEIGHT = 500;
+    private static final int PRIMARY_WIDTH = 750;
+    private static final int PRIMARY_HEIGHT = 750;
     private static final int FILTER_WIDTH = 357;
     private static final int FILTER_HEIGHT = 191;
 
-
     /**
      * Start method of Lab8 Application.
-     * //TODO
+     * Implements a logger to log to a Lab8.txt file
+     * Sets up primary stage and a filter kernel stage.
+     * Sets up both controllers for both stages.
      * @param primaryStage main stage of program
      * @throws Exception if something goes wrong
      */
@@ -58,10 +57,12 @@ public class Lab8 extends Application {
         FXMLLoader primaryLoader = new FXMLLoader();
         FXMLLoader kernelLoader = new FXMLLoader();
 
-        Parent primaryRoot = primaryLoader.load(getClass().getResource("lab8.fxml").openStream());
+        Parent primaryRoot = primaryLoader.load(getClass().getResource("lab8.fxml").
+                openStream());
         primaryStage.setTitle("Image Manipulator");
         primaryStage.setScene(new Scene(primaryRoot, PRIMARY_WIDTH, PRIMARY_HEIGHT));
         primaryStage.setResizable(false);
+        primaryStage.setOnCloseRequest(event -> LOGGER.info("User closed application"));
 
         Stage filterKernelStage = new Stage();
         Parent filterKernelRoot = kernelLoader.load(getClass().getResource("kernelUI.fxml")
@@ -78,7 +79,6 @@ public class Lab8 extends Application {
         kernelController.setStage(filterKernelStage);
 
         primaryStage.show();
-
     }
 
     public static void main(String[] args) {
@@ -86,20 +86,21 @@ public class Lab8 extends Application {
     }
 
     private static void setUpLogger() {
+        LOGGER.setUseParentHandlers(false);
         try {
-            FileHandler fh = new FileHandler(path.toString());
+            FileHandler fh = new FileHandler(System.getProperty("user.dir") +
+                    File.separator + "Lab8.txt", true);
             LOGGER.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
         } catch (IOException e) {
+            LOGGER.severe("Cannot create log file");
             Alert logFileAlert = new Alert(Alert.AlertType.ERROR, "Error with Log" +
                     " file ");
             logFileAlert.setTitle("Error Dialog");
             logFileAlert.setHeaderText("Log file error");
             logFileAlert.showAndWait();
         }
+
     }
-
-
-
 }
