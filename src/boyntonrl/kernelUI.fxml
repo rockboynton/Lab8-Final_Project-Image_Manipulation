@@ -5,8 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="191.0" prefWidth="357.0" xmlns:fx="http://javafx.com/fxml/1"
-          xmlns="http://javafx.com/javafx/8" fx:controller="boyntonrl.KernelController">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="198.0" prefWidth="364.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boyntonrl.KernelController">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
     <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -20,7 +19,7 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
   </rowConstraints>
    <children>
-      <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Blur" GridPane.columnIndex="3" />
+      <Button mnemonicParsing="false" onAction="#blur" prefHeight="25.0" prefWidth="125.0" text="Blur" GridPane.columnIndex="3" />
       <Button mnemonicParsing="false" onAction="#sharpen" prefHeight="25.0" prefWidth="190.0" text="Sharpen" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Button mnemonicParsing="false" onAction="#edge" prefHeight="25.0" prefWidth="143.0" text="Edge" GridPane.columnIndex="3" GridPane.rowIndex="2" />
       <Button mnemonicParsing="false" onAction="#apply" prefHeight="37.0" prefWidth="173.0" text="Apply" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
@@ -28,52 +27,52 @@
             <Insets right="5.0" />
          </GridPane.margin>
       </Button>
-      <TextField onAction="#blur">
+      <TextField fx:id="topLeft">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="1">
+      <TextField fx:id="topMiddle" GridPane.columnIndex="1">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="2">
+      <TextField fx:id="topRight" GridPane.columnIndex="2">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.rowIndex="1">
+      <TextField fx:id="middleLeft" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="1">
+      <TextField fx:id="middleMiddle" GridPane.columnIndex="1" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="2" GridPane.rowIndex="1">
+      <TextField fx:id="middleRight" GridPane.columnIndex="2" GridPane.rowIndex="1">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.rowIndex="2">
+      <TextField fx:id="bottomLeft" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="1" GridPane.rowIndex="2">
+      <TextField fx:id="bottomMiddle" GridPane.columnIndex="1" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.columnIndex="2" GridPane.rowIndex="2">
+      <TextField fx:id="bottomRight" GridPane.columnIndex="2" GridPane.rowIndex="2">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
-      <TextField GridPane.rowIndex="3">
+      <TextField fx:id="divisor" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>

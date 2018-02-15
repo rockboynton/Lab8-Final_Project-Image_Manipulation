@@ -77,6 +77,7 @@ public class Lab8 extends Application {
         primaryController.setKernelStage(filterKernelStage);
         KernelController kernelController = kernelLoader.getController();
         kernelController.setStage(filterKernelStage);
+        kernelController.setPrimaryController(primaryController);
 
         primaryStage.show();
     }
