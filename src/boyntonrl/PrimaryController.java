@@ -165,6 +165,10 @@ public class PrimaryController {
         }
     }
 
+    public ImageView getImageView() {
+        return this.imageView;
+    }
+
     private void showImageNotLoadedAlert() {
         Alert imageNotLoadedAlert = new Alert(Alert.AlertType.ERROR, "Error: No image " +
                 "has been loaded in yet! ");

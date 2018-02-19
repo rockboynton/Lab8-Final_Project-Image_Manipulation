@@ -77,7 +77,6 @@ public class KernelController {
 
     @FXML
     public void blur(ActionEvent e) {
-
         topLeft     .setText(format.format(defaultBlur[0]));
         topMiddle   .setText(format.format(defaultBlur[1]));
         topRight    .setText(format.format(defaultBlur[2]));
@@ -113,6 +112,7 @@ public class KernelController {
         kernel[8] = Float.valueOf(bottomRight.getText())  / Float.valueOf(divisor.getText());
 
         BufferedImageOp op = new ConvolveOp(new Kernel(3, 3, kernel));
+
 
 
     }
