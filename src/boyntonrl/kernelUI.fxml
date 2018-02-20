@@ -22,7 +22,7 @@
       <Button mnemonicParsing="false" onAction="#blur" prefHeight="25.0" prefWidth="125.0" text="Blur" GridPane.columnIndex="3" />
       <Button mnemonicParsing="false" onAction="#sharpen" prefHeight="25.0" prefWidth="190.0" text="Sharpen" GridPane.columnIndex="3" GridPane.rowIndex="1" />
       <Button mnemonicParsing="false" onAction="#edge" prefHeight="25.0" prefWidth="143.0" text="Edge" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#apply" prefHeight="37.0" prefWidth="173.0" text="Apply" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <Button mnemonicParsing="false" onAction="#apply" prefHeight="39.0" prefWidth="122.0" text="Apply" GridPane.columnIndex="1" GridPane.rowIndex="3">
          <GridPane.margin>
             <Insets right="5.0" />
          </GridPane.margin>
@@ -77,5 +77,11 @@
             <Insets right="5.0" />
          </GridPane.margin>
       </TextField>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.columnSpan="2" GridPane.rowIndex="3">
+         <children>
+            <Label prefHeight="34.0" prefWidth="110.0" text="# of times to apply kernel" wrapText="true" />
+            <Slider fx:id="kernelApplications" blockIncrement="1.0" max="25.0" minorTickCount="25" onMouseReleased="#setNumKernelApplications" prefHeight="33.0" prefWidth="151.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="1.0" />
+         </children>
+      </HBox>
    </children>
 </GridPane>

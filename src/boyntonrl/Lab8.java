@@ -70,6 +70,7 @@ public class Lab8 extends Application {
         filterKernelStage.setTitle("Filter Kernel");
         filterKernelStage.setScene(new Scene(filterKernelRoot, FILTER_WIDTH, FILTER_HEIGHT));
         filterKernelStage.setResizable(false);
+        filterKernelStage.setAlwaysOnTop(true);
         filterKernelStage.setX(X_OFFSET);
         filterKernelStage.setY(Y_OFFSET);
 
