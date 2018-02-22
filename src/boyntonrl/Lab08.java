@@ -26,11 +26,11 @@ import java.util.logging.SimpleFormatter;
  * JavaFX application to load, manipulate, and save images in .png, .gif, .jpg, .msoe, and .bmsoe
  * formats
  */
-public class Lab8 extends Application {
+public class Lab08 extends Application {
     /**
      * Logger for Lab8 application. Logs to the text file "Lab8.txt"
      */
-    public static final Logger LOGGER = Logger.getLogger(Lab8.class.getName());
+    public static final Logger LOGGER = Logger.getLogger(Lab08.class.getName());
 
     private static final int X_OFFSET = 1450;
     private static final int Y_OFFSET = 800;
@@ -57,7 +57,7 @@ public class Lab8 extends Application {
         FXMLLoader primaryLoader = new FXMLLoader();
         FXMLLoader kernelLoader = new FXMLLoader();
 
-        Parent primaryRoot = primaryLoader.load(getClass().getResource("lab8.fxml").
+        Parent primaryRoot = primaryLoader.load(getClass().getResource("Contoller.fxml").
                 openStream());
         primaryStage.setTitle("Image Manipulator");
         primaryStage.setScene(new Scene(primaryRoot, PRIMARY_WIDTH, PRIMARY_HEIGHT));
@@ -65,7 +65,7 @@ public class Lab8 extends Application {
         primaryStage.setOnCloseRequest(event -> LOGGER.info("User closed application"));
 
         Stage filterKernelStage = new Stage();
-        Parent filterKernelRoot = kernelLoader.load(getClass().getResource("kernelUI.fxml")
+        Parent filterKernelRoot = kernelLoader.load(getClass().getResource("KernalContoller.fxml")
                 .openStream());
         filterKernelStage.setTitle("Filter Kernel");
         filterKernelStage.setScene(new Scene(filterKernelRoot, FILTER_WIDTH, FILTER_HEIGHT));
@@ -74,11 +74,11 @@ public class Lab8 extends Application {
         filterKernelStage.setX(X_OFFSET);
         filterKernelStage.setY(Y_OFFSET);
 
-        PrimaryController primaryController = primaryLoader.getController();
-        primaryController.setKernelStage(filterKernelStage);
-        KernelController kernelController = kernelLoader.getController();
-        kernelController.setStage(filterKernelStage);
-        kernelController.setPrimaryController(primaryController);
+        Controller controller = primaryLoader.getController();
+        controller.setKernelStage(filterKernelStage);
+        KernalController kernalController = kernelLoader.getController();
+        kernalController.setStage(filterKernelStage);
+        kernalController.setController(controller);
 
         primaryStage.show();
     }

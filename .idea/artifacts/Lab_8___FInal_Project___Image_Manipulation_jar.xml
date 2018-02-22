@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Lab 8 - FInal Project - Image Manipulation:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Lab_8___FInal_Project___Image_Manipulation_jar</output-path>
+    <root id="archive" name="Lab 8 - FInal Project - Image Manipulation.jar">
+      <element id="module-output" name="Lab 8 - FInal Project - Image Manipulation" />
+    </root>
+  </artifact>
+</component>

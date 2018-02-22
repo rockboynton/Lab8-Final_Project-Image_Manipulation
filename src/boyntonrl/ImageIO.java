@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class ImageIO {
 
-    private static final Logger LOGGER = Lab8.LOGGER;
+    private static final Logger LOGGER = Lab08.LOGGER;
 
     /**
      * Radix for hexadecimal numbers

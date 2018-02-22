@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 
 /**
  * Functional interface in which the method, named transform, accepts three arguments: the x
- * and y location of the pixel and its color. The method must return the color for the pixel
+ * and y location of the pixel and its color. The method returns the color for the pixel
  * after the applying the transformation.
  */
 @FunctionalInterface

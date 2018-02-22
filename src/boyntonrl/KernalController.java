@@ -30,12 +30,12 @@ import java.awt.image.ImagingOpException;
 /**
  * Controller for the filter kernel stage.
  */
-public class KernelController {
+public class KernalController {
 
-    private static final Logger LOGGER = Lab8.LOGGER;
+    private static final Logger LOGGER = Lab08.LOGGER;
 
     private Stage kernelStage;
-    private PrimaryController primaryController;
+    private Controller controller;
 
     public void setStage(Stage kernelStage) {
         this.kernelStage = kernelStage;
@@ -68,17 +68,26 @@ public class KernelController {
 
     private DecimalFormat format = new DecimalFormat("0.#");
 
-    private static final double[] DEFAULT_BLUR = {
+    /**
+     * Default kernel values for a blur filter
+     */
+    public static final double[] DEFAULT_BLUR = {
             0, 1, 0,
             1, 5, 1,
             0, 1, 0};
 
-    private static final double[] DEFAULT_SHARPEN = {
+    /**
+     * Default kernel values for a sharpen filter
+     */
+    public static final double[] DEFAULT_SHARPEN = {
             0, -1, 0,
             -1, 5, -1,
             0, -1, 0};
 
-    private static final double[] DEFAULT_EDGE = {
+    /**
+     * Default kernel values for a edge filter
+     */
+    public static final double[] DEFAULT_EDGE = {
             0, -1, 0,
             -1, 4, -1,
             0, -1, 0};
@@ -128,11 +137,12 @@ public class KernelController {
     @FXML
     private void apply(ActionEvent e) {
         try {
+            // kernel array with 9 values to store a 3 by 3 kernel
             float[] kernel = new float[9];
             BufferedImage sourceImage;
-            BufferedImage filteredImage = SwingFXUtils.fromFXImage(primaryController
+            BufferedImage filteredImage = SwingFXUtils.fromFXImage(controller
                     .getImage(), null);
-            Image newImage = primaryController.getImage();
+            Image newImage = controller.getImage();
             // fill the kernel array with appropriate values from text fields
             kernel[0] = Float.valueOf(topLeft.getText()) / Float.valueOf(divisor.getText());
             kernel[1] = Float.valueOf(topMiddle.getText()) / Float.valueOf(divisor.getText());
@@ -149,13 +159,12 @@ public class KernelController {
                 sourceImage = filteredImage;
                 filteredImage = op.filter(sourceImage, null);
                 newImage = SwingFXUtils.toFXImage(filteredImage, null);
-                System.out.println("working");
             }
-            primaryController.getImageView().setImage(newImage);
-        } catch (NumberFormatException e1) {
+            controller.getImageView().setImage(newImage);
+        } catch (NumberFormatException nfe) {
             showBlankFieldAlert();
             LOGGER.info("User attempted to filter image with a blank field");
-        } catch (ImagingOpException e2) {
+        } catch (ImagingOpException imgOpE) {
             showInvalidDivisorAlert();
             LOGGER.info("User attempted to use an invalid divisor: " + divisor.getText());
         }
@@ -166,8 +175,8 @@ public class KernelController {
         numKernelApplications = (int) kernelApplications.getValue();
     }
 
-    public void setPrimaryController(PrimaryController controller) {
-        this.primaryController = controller;
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
 
     private void showBlankFieldAlert() {

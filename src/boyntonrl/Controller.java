@@ -28,9 +28,9 @@ import java.util.logging.Logger;
 /**
  * Controller class for the Lab8 JavaFX application to handle program logic.
  */
-public class PrimaryController {
+public class Controller {
 
-    private static final Logger LOGGER = Lab8.LOGGER;
+    private static final Logger LOGGER = Lab08.LOGGER;
 
     private Stage kernelStage;
     private Image image;
@@ -75,9 +75,7 @@ public class PrimaryController {
                 LOGGER.info("User successfully saved file");
             }
         } else {
-            // alert saying no image is loaded yet
             showImageNotLoadedAlert();
-            // log
             LOGGER.log(Level.INFO, "User attempted to save when no image was present");
 
         }
